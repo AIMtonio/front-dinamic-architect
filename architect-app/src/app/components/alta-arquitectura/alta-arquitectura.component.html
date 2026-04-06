@@ -1,0 +1,32 @@
+<div class="page-container">
+  <div class="card">
+    <h1 class="title">Alta de Arquitectura</h1>
+    <p class="subtitle">Agrega los componentes que forman parte de tu arquitectura.</p>
+
+    <div class="form-group">
+      <label for="nombre">Nombre del componente</label>
+      <input
+        id="nombre"
+        type="text"
+        [(ngModel)]="nombre"
+        placeholder="Ej. pos-service-back"
+        [class.error]="errorNombre"
+        (keyup.enter)="agregar()"
+      />
+      <span class="error-msg" *ngIf="errorNombre">El nombre es obligatorio.</span>
+    </div>
+
+    <div class="form-group">
+      <label for="tipo">Tipo</label>
+      <select id="tipo" [(ngModel)]="tipo">
+        <option *ngFor="let t of tiposDisponibles" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" (click)="agregar()">+ Agregar componente</button>
+      <button class="btn btn-secondary" (click)="irALista()">Ver lista →</button>
+    </div>
+  </div>
+</div>
+

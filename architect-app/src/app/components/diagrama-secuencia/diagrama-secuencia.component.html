@@ -1,0 +1,91 @@
+<div class="page-container">
+  <div class="card">
+    <h1 class="title">Generador de Diagrama de Secuencia UML</h1>
+    <p class="subtitle">Completa el formulario y genera el diagrama en formato PlantUML.</p>
+
+    <!-- Campos principales -->
+    <div class="form-group">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" [(ngModel)]="titulo" placeholder="Ej. Compra en línea" />
+    </div>
+
+    <div class="form-group">
+      <label for="contexto">Contexto</label>
+      <input id="contexto" type="text" [(ngModel)]="contexto" placeholder="Ej. Flujo de checkout en una tienda web" />
+    </div>
+
+    <div class="form-group">
+      <label for="actor">Actor principal</label>
+      <input id="actor" type="text" [(ngModel)]="actorPrincipal" placeholder="Ej. Cliente" />
+    </div>
+
+    <!-- Pasos -->
+    <div class="pasos-header">
+      <label>Pasos</label>
+      <button class="btn btn-add" type="button" (click)="agregarPaso()">+ Agregar paso</button>
+    </div>
+
+    <div class="paso-item" *ngFor="let paso of pasos; let i = index; trackBy: trackByIndex">
+      <span class="paso-num">{{ i + 1 }}</span>
+      <input
+        type="text"
+        [(ngModel)]="paso.descripcion"
+        [name]="'paso-' + i"
+        placeholder="Descripción del paso"
+      />
+      <button
+        class="btn-delete"
+        type="button"
+        (click)="eliminarPaso(i)"
+        [disabled]="pasos.length === 1"
+        title="Eliminar paso"
+      >✕</button>
+    </div>
+
+    <!-- Acción -->
+    <div class="actions">
+      <button
+        class="btn btn-primary"
+        (click)="generar()"
+        [disabled]="generando || !formValido()"
+      >
+        {{ generando ? 'Generando...' : '&#x26A1; Generar diagrama' }}
+      </button>
+    </div>
+
+    <!-- Error -->
+    <div class="api-status status-error" *ngIf="estado === 'error'">
+      {{ mensajeError }}
+    </div>
+
+    <!-- Resultado -->
+    <div class="resultado-section" *ngIf="estado === 'ok'">
+      <div class="resultado-header">
+        <span class="resultado-label">&#x2705; Diagrama generado</span>
+        <button class="btn btn-outline" (click)="copiarResultado()">
+          {{ resultadoCopiado ? '¡Copiado!' : 'Copiar' }}
+        </button>
+      </div>
+      <textarea class="resultado-area" readonly [value]="resultado"></textarea>
+    </div>
+
+    <!-- Diagrama renderizado -->
+    <div class="diagrama-section" *ngIf="diagramaUrl">
+      <div class="diagrama-header">
+        <span class="diagrama-label">Vista previa del diagrama</span>
+        <a class="btn btn-download" [href]="diagramaUrl" target="_blank" rel="noopener noreferrer" download>
+          &#x2B07; Descargar PNG
+        </a>
+      </div>
+      <div class="diagrama-loader" *ngIf="cargandoImagen">Cargando imagen...</div>
+      <img
+        class="diagrama-img"
+        [src]="diagramaUrl"
+        alt="Diagrama de secuencia UML"
+        (load)="onImagenCargada()"
+        [style.display]="cargandoImagen ? 'none' : 'block'"
+      />
+    </div>
+  </div>
+</div>
+

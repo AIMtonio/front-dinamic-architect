@@ -1,0 +1,63 @@
+<div class="page-container">
+  <div class="card">
+    <div class="header">
+      <h1 class="title">Componentes registrados</h1>
+      <button class="btn btn-back" (click)="irAAlta()">← Agregar más</button>
+    </div>
+
+    <div class="empty" *ngIf="componentes.length === 0">
+      <p>No hay componentes registrados aún.</p>
+      <button class="btn btn-primary" (click)="irAAlta()">Agregar primer componente</button>
+    </div>
+
+    <table *ngIf="componentes.length > 0" class="tabla">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Componente</th>
+          <th>Tipo</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of componentes; let i = index">
+          <td class="idx">{{ i + 1 }}</td>
+          <td class="nombre">{{ item.nombre }}</td>
+          <td><span class="badge" [ngClass]="tipoColor(item.tipo)">{{ item.tipo }}</span></td>
+          <td>
+            <button class="btn-delete" (click)="eliminar(i)" title="Eliminar">✕</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="json-section" *ngIf="componentes.length > 0">
+      <div class="json-toggle">
+        <button class="btn btn-outline" (click)="jsonVisible = !jsonVisible">
+          {{ jsonVisible ? 'Ocultar JSON' : 'Ver JSON' }}
+        </button>
+        <button class="btn btn-outline" (click)="copiarJson()" *ngIf="jsonVisible">
+          {{ jsonCopiado ? '¡Copiado!' : 'Copiar' }}
+        </button>
+        <button class="btn btn-send" (click)="enviarApi()" [disabled]="enviandoApi">
+          {{ enviandoApi ? 'Enviando...' : '&#x1F4E4; Enviar a API' }}
+        </button>
+        <button class="btn btn-danger" (click)="limpiar()">Limpiar todo</button>
+      </div>
+
+      <div class="api-status" *ngIf="apiEstado !== 'idle'" [ngClass]="'status-' + apiEstado">
+        {{ apiMensaje }}
+        <button
+          *ngIf="apiEstado === 'ok' && driveDownloadUrl"
+          class="btn btn-download"
+          (click)="descargar()"
+        >
+          &#x2B07; Descargar archivo
+        </button>
+      </div>
+
+      <pre class="json-preview" *ngIf="jsonVisible">{{ jsonResultado }}</pre>
+    </div>
+  </div>
+</div>
+

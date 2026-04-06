@@ -1,0 +1,91 @@
+<div class="page-container">
+  <div class="card">
+    <h1 class="title">Generador de Diagrama ArchiMate</h1>
+    <p class="subtitle">Completa cada sección y genera el modelo ArchiMate en formato XML.</p>
+
+    <!-- Business Actors -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Business Actors</span>
+        <button class="btn-add" type="button" (click)="agregar(businessActors)">+ Añadir</button>
+      </div>
+      <div class="item-row" *ngFor="let item of businessActors; let i = index; trackBy: trackByIndex">
+        <span class="row-num">{{ i + 1 }}</span>
+        <input type="text" [(ngModel)]="item.name" [name]="'ba-' + i" placeholder="Ej. Aplicaciones" />
+        <button class="btn-delete" (click)="eliminar(businessActors, i)" [disabled]="businessActors.length === 1">✕</button>
+      </div>
+    </div>
+
+    <!-- Drivers -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Drivers</span>
+        <button class="btn-add" type="button" (click)="agregar(drivers)">+ Añadir</button>
+      </div>
+      <div class="item-row" *ngFor="let item of drivers; let i = index; trackBy: trackByIndex">
+        <span class="row-num">{{ i + 1 }}</span>
+        <input type="text" [(ngModel)]="item.name" [name]="'dr-' + i" placeholder="Ej. Incrementar conversión en tienda" />
+        <button class="btn-delete" (click)="eliminar(drivers, i)" [disabled]="drivers.length === 1">✕</button>
+      </div>
+    </div>
+
+    <!-- Goals -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Goals</span>
+        <button class="btn-add" type="button" (click)="agregar(goals)">+ Añadir</button>
+      </div>
+      <div class="item-row" *ngFor="let item of goals; let i = index; trackBy: trackByIndex">
+        <span class="row-num">{{ i + 1 }}</span>
+        <input type="text" [(ngModel)]="item.name" [name]="'go-' + i" placeholder="Ej. Habilitar cambalache para PF" />
+        <button class="btn-delete" (click)="eliminar(goals, i)" [disabled]="goals.length === 1">✕</button>
+      </div>
+    </div>
+
+    <!-- Principles -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Principles</span>
+        <button class="btn-add" type="button" (click)="agregar(principles)">+ Añadir</button>
+      </div>
+      <div class="item-row" *ngFor="let item of principles; let i = index; trackBy: trackByIndex">
+        <span class="row-num">{{ i + 1 }}</span>
+        <input type="text" [(ngModel)]="item.name" [name]="'pr-' + i" placeholder="Ej. Mayor tasa en cierre en tienda" />
+        <button class="btn-delete" (click)="eliminar(principles, i)" [disabled]="principles.length === 1">✕</button>
+      </div>
+    </div>
+
+    <!-- Course of Actions -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Course of Actions</span>
+        <button class="btn-add" type="button" (click)="agregar(courseOfActions)">+ Añadir</button>
+      </div>
+      <div class="item-row" *ngFor="let item of courseOfActions; let i = index; trackBy: trackByIndex">
+        <span class="row-num">{{ i + 1 }}</span>
+        <input type="text" [(ngModel)]="item.name" [name]="'ca-' + i" placeholder="Ej. Implementar portal de cambalache" />
+        <button class="btn-delete" (click)="eliminar(courseOfActions, i)" [disabled]="courseOfActions.length === 1">✕</button>
+      </div>
+    </div>
+
+    <!-- Acción -->
+    <div class="actions">
+      <button
+        class="btn btn-primary"
+        (click)="generar()"
+        [disabled]="generando || !formValido()"
+      >
+        {{ generando ? 'Generando...' : '&#x26A1; Generar ArchiMate' }}
+      </button>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback status-ok" *ngIf="estado === 'ok'">
+      &#x2705; Diagrama generado y descarga iniciada.
+    </div>
+    <div class="feedback status-error" *ngIf="estado === 'error'">
+      {{ mensajeError }}
+    </div>
+  </div>
+</div>
+

@@ -99,4 +99,132 @@
       background: #e0deff;
     }
   }
+
+  &.btn-import {
+    background: #059669;
+    color: white;
+    &:hover { background: #047857; }
+  }
+
+  &.btn-discard {
+    background: #f1f0ff;
+    color: #6b7280;
+    &:hover { background: #e5e7eb; }
+  }
+}
+
+// ── Divisor ──────────────────────────────────────────────────
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.6rem 0;
+  color: #aaa;
+  font-size: 0.85rem;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0ef;
+  }
+}
+
+// ── Drop zone ─────────────────────────────────────────────────
+.drop-zone {
+  border: 2px dashed #c7c6ef;
+  border-radius: 10px;
+  padding: 1.4rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+
+  &:hover, &.activo {
+    background: #f1f0ff;
+    border-color: #4f46e5;
+  }
+
+  .drop-icon { font-size: 1.8rem; }
+
+  .drop-text {
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  .drop-hint {
+    font-size: 0.78rem;
+    color: #999;
+    font-family: 'Courier New', monospace;
+  }
+}
+
+// ── Error Excel ───────────────────────────────────────────────
+.excel-error {
+  margin-top: 0.8rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+// ── Vista previa ──────────────────────────────────────────────
+.preview-section {
+  margin-top: 1.4rem;
+}
+
+.preview-header {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.6rem;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    background: #f5f5fb;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0ef;
+  }
+
+  td {
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid #eeeefc;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .idx   { color: #aaa; font-size: 0.8rem; width: 28px; }
+  .nombre { font-weight: 500; font-family: 'Courier New', monospace; color: #1a1a2e; }
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &.badge-eks     { background: #d1fae5; color: #065f46; }
+  &.badge-lambda  { background: #fef3c7; color: #92400e; }
+  &.badge-fargate { background: #dbeafe; color: #1e40af; }
+  &.badge-ec2     { background: #ede9fe; color: #5b21b6; }
+}
+
+.preview-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
 }

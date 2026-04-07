@@ -1,11 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f4f9;
-  color: #1a1a2e;
+:root {
+  --primary:      #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-light:#ede9fe;
+  --success:      #059669;
+  --danger:       #ef4444;
+  --bg:           #f0f0f8;
+  --surface:      #ffffff;
+  --text:         #1a1a2e;
+  --muted:        #6b6b8a;
+  --border:       #d0d0e8;
+  --radius:       12px;
+  --shadow:       0 4px 24px rgba(79, 70, 229, 0.08);
+  --shadow-hover: 0 8px 32px rgba(79, 70, 229, 0.16);
+  --transition:   0.22s ease;
 }
+
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Animación de entrada de página ─────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-container {
+  animation: fadeSlideUp 0.35s ease both;
+}
+
+/* ── Card global upgrade ─────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition);
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+/* ── Input / select global upgrade ──────────────────────── */
+input, select, textarea {
+  font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  }
+}
+
+/* ── Scrollbar personalizado ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c4c4d8; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }

@@ -8,7 +8,7 @@ import { ArquitecturaService } from './services/arquitectura.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'architect-app';
+  title = 'front-dinamic-architect';
   componenteCount = 0;
   private sub!: Subscription;
 

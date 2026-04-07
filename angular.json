@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "architect-app": {
+    "front-dinamic-architect": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/architect-app",
+            "outputPath": "dist/front-dinamic-architect",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -75,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "architect-app:build:production"
+              "buildTarget": "front-dinamic-architect:build:production"
             },
             "development": {
-              "buildTarget": "architect-app:build:development"
+              "buildTarget": "front-dinamic-architect:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "architect-app:build"
+            "buildTarget": "front-dinamic-architect:build"
           }
         },
         "test": {
@@ -110,5 +110,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ccc30de7-a606-4b93-835b-3d921a3cbab4"
   }
 }

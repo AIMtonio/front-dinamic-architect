@@ -1,0 +1,114 @@
+@keyframes shimmerBrand {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3e 60%, #16213e 100%);
+  padding: 0 2rem;
+  height: 58px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.15);
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #a78bfa, #818cf8, #c4b5fd, #a78bfa);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmerBrand 4s linear infinite;
+    letter-spacing: -0.01em;
+
+    .brand-icon {
+      font-size: 1.3rem;
+      -webkit-text-fill-color: #a78bfa;
+    }
+
+    .brand-author {
+      font-size: 0.72rem;
+      font-weight: 500;
+      -webkit-text-fill-color: rgba(167, 139, 250, 0.6);
+      background: none;
+      align-self: flex-end;
+      padding-bottom: 1px;
+      letter-spacing: 0;
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.3rem;
+
+    a {
+      position: relative;
+      color: #a0a0c0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.01em;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        width: 60%;
+        height: 2px;
+        background: #a78bfa;
+        border-radius: 2px;
+        transition: transform 0.25s ease;
+      }
+
+      &:hover {
+        color: #e0d9ff;
+        background: rgba(167, 139, 250, 0.1);
+      }
+
+      &.active {
+        color: #c4b5fd;
+        background: rgba(167, 139, 250, 0.12);
+
+        &::after {
+          transform: translateX(-50%) scaleX(1);
+        }
+      }
+
+      .nav-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #a78bfa;
+        color: #1a0a4e;
+        font-size: 0.67rem;
+        font-weight: 800;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 20px;
+        padding: 0 4px;
+        margin-left: 5px;
+        vertical-align: middle;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+main {
+  min-height: calc(100vh - 58px);
+  background: var(--bg);
+}

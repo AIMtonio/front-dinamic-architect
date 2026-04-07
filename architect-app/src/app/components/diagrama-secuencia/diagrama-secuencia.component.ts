@@ -86,6 +86,19 @@ export class DiagramaSecuenciaComponent {
     });
   }
 
+  resetear(): void {
+    this.titulo = '';
+    this.contexto = '';
+    this.actorPrincipal = '';
+    this.pasos = [{ descripcion: '' }];
+    this.resultado = '';
+    this.estado = 'idle';
+    this.mensajeError = '';
+    this.diagramaUrl = null;
+    this.cargandoImagen = true;
+    this.resultadoCopiado = false;
+  }
+
   onImagenCargada(): void {
     this.cargandoImagen = false;
   }

@@ -1,7 +1,10 @@
 <div class="page-container">
   <div class="card">
     <div class="header">
-      <h1 class="title">Componentes registrados</h1>
+      <h1 class="title">
+        Componentes registrados
+        <span class="count-badge" *ngIf="componentes.length > 0">{{ componentes.length }}</span>
+      </h1>
       <button class="btn btn-back" (click)="irAAlta()">← Agregar más</button>
     </div>
 
@@ -25,7 +28,7 @@
           <td class="nombre">{{ item.nombre }}</td>
           <td><span class="badge" [ngClass]="tipoColor(item.tipo)">{{ item.tipo }}</span></td>
           <td>
-            <button class="btn-delete" (click)="eliminar(i)" title="Eliminar">✕</button>
+            <button class="btn-delete" (click)="eliminar(i)" title="Eliminar" [attr.aria-label]="'Eliminar ' + item.nombre">✕</button>
           </td>
         </tr>
       </tbody>
@@ -40,7 +43,8 @@
           {{ jsonCopiado ? '¡Copiado!' : 'Copiar' }}
         </button>
         <button class="btn btn-send" (click)="enviarApi()" [disabled]="enviandoApi">
-          {{ enviandoApi ? 'Enviando...' : '&#x1F4E4; Enviar a API' }}
+          <span class="spinner" *ngIf="enviandoApi"></span>
+          {{ enviandoApi ? 'Enviando...' : '📤 Enviar a API' }}
         </button>
         <button class="btn btn-danger" (click)="limpiar()">Limpiar todo</button>
       </div>

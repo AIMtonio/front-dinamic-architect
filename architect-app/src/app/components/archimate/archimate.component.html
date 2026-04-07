@@ -75,7 +75,8 @@
         (click)="generar()"
         [disabled]="generando || !formValido()"
       >
-        {{ generando ? 'Generando...' : '&#x26A1; Generar ArchiMate' }}
+        <span class="spinner" *ngIf="generando"></span>
+        {{ generando ? 'Generando...' : '⚡ Generar ArchiMate' }}
       </button>
     </div>
 

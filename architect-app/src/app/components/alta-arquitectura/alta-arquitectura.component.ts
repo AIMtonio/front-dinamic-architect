@@ -16,6 +16,7 @@ export class AltaArquitecturaComponent {
   tipo: TipoComponente = 'eks';
   tiposDisponibles: TipoComponente[] = ['eks', 'lambda', 'fargate', 'ec2'];
   errorNombre = false;
+  agregadoOk = false;
 
   // Excel
   excelPreview: ComponenteItem[] = [];
@@ -38,6 +39,8 @@ export class AltaArquitecturaComponent {
     this.arquitecturaService.agregar(item);
     this.nombre = '';
     this.tipo = 'eks';
+    this.agregadoOk = true;
+    setTimeout(() => (this.agregadoOk = false), 2500);
   }
 
   irALista(): void {

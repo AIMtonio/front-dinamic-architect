@@ -87,6 +87,23 @@
           transform: translateX(-50%) scaleX(1);
         }
       }
+
+      .nav-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #a78bfa;
+        color: #1a0a4e;
+        font-size: 0.67rem;
+        font-weight: 800;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 20px;
+        padding: 0 4px;
+        margin-left: 5px;
+        vertical-align: middle;
+        line-height: 1;
+      }
     }
   }
 }

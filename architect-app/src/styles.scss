@@ -69,3 +69,42 @@ input, select, textarea {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #c4c4d8; border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* ── Spinner CSS para botones loading ────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* ── Toast global de éxito ───────────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.toast-ok {
+  position: fixed;
+  bottom: 1.6rem;
+  right: 1.6rem;
+  background: linear-gradient(135deg, #059669, #0d9488);
+  color: white;
+  padding: 0.7rem 1.3rem;
+  border-radius: 12px;
+  font-size: 0.87rem;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.35);
+  animation: toastIn 0.22s ease both;
+  z-index: 9999;
+  pointer-events: none;
+}

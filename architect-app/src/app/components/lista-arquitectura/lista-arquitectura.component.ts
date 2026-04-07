@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { ComponenteItem } from '../../models/arquitectura.model';
@@ -10,7 +11,7 @@ import { ArquitecturaService } from '../../services/arquitectura.service';
   templateUrl: './lista-arquitectura.component.html',
   styleUrl: './lista-arquitectura.component.scss'
 })
-export class ListaArquitecturaComponent implements OnInit {
+export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   componentes: ComponenteItem[] = [];
   jsonVisible = false;
   jsonCopiado = false;
@@ -21,6 +22,7 @@ export class ListaArquitecturaComponent implements OnInit {
   driveDownloadUrl: string | null = null;
   driveFileName: string | null = null;
 
+  private sub!: Subscription;
   private readonly API_URL = `${environment.apiBaseUrl}/diagram/from-json`;
 
   constructor(
@@ -30,9 +32,13 @@ export class ListaArquitecturaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.arquitecturaService.componentes$.subscribe(items => {
+    this.sub = this.arquitecturaService.componentes$.subscribe(items => {
       this.componentes = items;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   eliminar(index: number): void {
@@ -40,6 +46,7 @@ export class ListaArquitecturaComponent implements OnInit {
   }
 
   limpiar(): void {
+    if (!confirm(`¿Eliminar los ${this.componentes.length} componentes? Esta acción no se puede deshacer.`)) return;
     this.arquitecturaService.limpiar();
   }
 

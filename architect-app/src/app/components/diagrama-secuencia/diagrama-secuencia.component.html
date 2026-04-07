@@ -49,7 +49,11 @@
         (click)="generar()"
         [disabled]="generando || !formValido()"
       >
-        {{ generando ? 'Generando...' : '&#x26A1; Generar diagrama' }}
+        <span class="spinner" *ngIf="generando"></span>
+        {{ generando ? 'Generando...' : '⚡ Generar diagrama' }}
+      </button>
+      <button class="btn btn-outline" (click)="resetear()" *ngIf="estado !== 'idle'">
+        ↺ Nueva consulta
       </button>
     </div>
 

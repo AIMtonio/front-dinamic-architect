@@ -6,7 +6,10 @@
   </span>
   <div class="nav-links">
     <a routerLink="/alta"      routerLinkActive="active">Alta</a>
-    <a routerLink="/lista"     routerLinkActive="active">Lista</a>
+    <a routerLink="/lista"     routerLinkActive="active">
+      Lista
+      <span class="nav-count" *ngIf="componenteCount > 0">{{ componenteCount }}</span>
+    </a>
     <a routerLink="/secuencia" routerLinkActive="active">Diagrama UML</a>
     <a routerLink="/archimate" routerLinkActive="active">ArchiMate</a>
   </div>

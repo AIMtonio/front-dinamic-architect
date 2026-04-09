@@ -52,7 +52,7 @@
       <div class="api-status" *ngIf="apiEstado !== 'idle'" [ngClass]="'status-' + apiEstado">
         {{ apiMensaje }}
         <button
-          *ngIf="apiEstado === 'ok' && driveDownloadUrl"
+          *ngIf="apiEstado === 'ok' && (driveDownloadUrl || driveFileContent)"
           class="btn btn-download"
           (click)="descargar()"
         >

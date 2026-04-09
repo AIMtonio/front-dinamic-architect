@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://aarquitectura.antonioalonso.com.mx'
+  apiBaseUrl: 'http://localhost:3000'
 };

@@ -21,6 +21,7 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   apiMensaje = '';
   driveDownloadUrl: string | null = null;
   driveFileName: string | null = null;
+  driveFileContent: string | null = null;
 
   private sub!: Subscription;
   private readonly API_URL = `${environment.apiBaseUrl}/diagram/from-json`;
@@ -81,13 +82,15 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
     this.apiMensaje = '';
     this.driveDownloadUrl = null;
     this.driveFileName = null;
+    this.driveFileContent = null;
     const body = this.arquitecturaService.obtenerJson();
-    this.http.post<any>(this.API_URL, body).subscribe({
+    this.http.post(this.API_URL, body, { responseType: 'text' }).subscribe({
       next: (res) => {
         this.apiEstado = 'ok';
-        this.apiMensaje = res?.data?.attributes?.message ?? 'Enviado correctamente.';
-        this.driveDownloadUrl = res?.data?.links?.driveDownloadUrl ?? null;
-        this.driveFileName = res?.data?.attributes?.file?.name ?? 'diagrama.drawio';
+        this.apiMensaje = 'Diagrama generado correctamente.';
+        this.driveDownloadUrl = null;
+        this.driveFileName = 'diagrama.drawio';
+        this.driveFileContent = res;
         this.enviandoApi = false;
       },
       error: (err) => {
@@ -99,12 +102,22 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   }
 
   descargar(): void {
-    if (!this.driveDownloadUrl) return;
-    const a = document.createElement('a');
-    a.href = this.driveDownloadUrl;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.download = this.driveFileName ?? 'diagrama.drawio';
-    a.click();
+    const fileName = this.driveFileName ?? 'diagrama.drawio';
+    if (this.driveFileContent) {
+      const blob = new Blob([this.driveFileContent], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    } else if (this.driveDownloadUrl) {
+      const a = document.createElement('a');
+      a.href = this.driveDownloadUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.download = fileName;
+      a.click();
+    }
   }
 }

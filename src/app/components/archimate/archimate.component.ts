@@ -52,13 +52,11 @@ export class ArchimateComponent {
       courseOfActions: trim(this.courseOfActions)
     };
 
-    this.http.post<any>(this.API_URL, body).subscribe({
+    this.http.post(this.API_URL, body, { responseType: 'text' }).subscribe({
       next: (res) => {
         this.estado = 'ok';
         this.generando = false;
-        const url      = res?.data?.links?.driveDownloadUrl;
-        const filename = res?.data?.attributes?.file?.name ?? 'archimate-model.xml';
-        if (url) this.descargar(url, filename);
+        this.descargar(res, 'archimate-model.xml');
       },
       error: (err) => {
         this.estado = 'error';
@@ -68,12 +66,13 @@ export class ArchimateComponent {
     });
   }
 
-  private descargar(url: string, filename: string): void {
+  private descargar(content: string, filename: string): void {
+    const blob = new Blob([content], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
     a.download = filename;
     a.click();
+    URL.revokeObjectURL(url);
   }
 }

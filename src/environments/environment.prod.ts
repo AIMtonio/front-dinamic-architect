@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://arquitectura.antonioalonso.com.mx'
+  apiBaseUrl: 'https://aarquitectura.antonioalonso.com.mx'
 };

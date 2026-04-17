@@ -5,6 +5,7 @@ import { ListaArquitecturaComponent } from './components/lista-arquitectura/list
 import { DiagramaSecuenciaComponent } from './components/diagrama-secuencia/diagrama-secuencia.component';
 import { ArchimateComponent } from './components/archimate/archimate.component';
 import { DocumentoComponent } from './components/documento/documento.component';
+import { TagsComponent } from './components/tags/tags.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'alta', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'secuencia', component: DiagramaSecuenciaComponent },
   { path: 'archimate', component: ArchimateComponent },
   { path: 'documento', component: DocumentoComponent },
+  { path: 'tags', component: TagsComponent },
   { path: '**', redirectTo: 'alta' }
 ];
 

@@ -1,0 +1,132 @@
+<div class="page-container">
+  <div class="card">
+    <h1 class="title">Consulta de Tags (CECO)</h1>
+
+    <div class="metadata-grid">
+      <div class="field">
+        <label for="projectId" class="label">ProjectId</label>
+        <input id="projectId" type="text" class="text-input" [(ngModel)]="projectId" />
+      </div>
+
+      <div class="field">
+        <label for="bussinesunit" class="label">Bussinesunit</label>
+        <input id="bussinesunit" type="text" class="text-input" [(ngModel)]="bussinesunit" />
+      </div>
+
+      <div class="field">
+        <label for="owner" class="label">Owner</label>
+        <input id="owner" type="text" class="text-input" [(ngModel)]="owner" />
+      </div>
+
+      <div class="field">
+        <label for="textoBusqueda" class="label">Texto a consultar</label>
+        <input
+          id="textoBusqueda"
+          type="text"
+          [(ngModel)]="textoBusqueda"
+          (ngModelChange)="onTextoBusquedaChange()"
+          class="text-input"
+          placeholder="Ejemplo: riesgos"
+        />
+      </div>
+
+      <div class="field field-full">
+        <div class="search-state" *ngIf="cargando">
+          <span class="spinner spinner-dark"></span>
+          Buscando en tiempo real...
+        </div>
+
+        <div class="api-status" *ngIf="estado !== 'idle'" [ngClass]="'status-' + estado">
+          {{ mensaje }}
+        </div>
+
+        <section class="result" *ngIf="resultados.length > 0">
+          <label class="label">Selecciona un CECO</label>
+          <div class="table-wrapper">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>CECO</th>
+                  <th>Nombre Corto</th>
+                  <th>Nombre Largo</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of resultados"
+                  (click)="seleccionarCeco(item)"
+                  [class.selected]="cecoSeleccionado === item.ceco"
+                >
+                  <td>{{ item.ceco }}</td>
+                  <td>{{ item.nombreCorto }}</td>
+                  <td>{{ item.nombreLargo }}</td>
+                  <td>{{ item.responsable }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="selected-ceco" *ngIf="cecoSeleccionado">
+            CECO seleccionado: <strong>{{ cecoSeleccionado }}</strong>
+          </p>
+        </section>
+      </div>
+
+      
+      <div class="field">
+        <label for="costCenter" class="label">CostCenter</label>
+        <input id="costCenter" type="text" class="text-input" [(ngModel)]="costCenter" [disabled]="true" />
+      </div>
+
+      <div class="field">
+        <label for="aplication" class="label">Aplication</label>
+        <input id="aplication" type="text" class="text-input" [(ngModel)]="aplication" />
+      </div>
+
+      <div class="field">
+        <label for="creationDate" class="label">CreationDate</label>
+        <input id="creationDate" type="date" class="text-input" [(ngModel)]="creationDate" />
+      </div>
+
+      <div class="field">
+        <label for="lifecycle" class="label">Lifecycle</label>
+        <input id="lifecycle" type="text" class="text-input" [(ngModel)]="lifecycle" />
+      </div>
+
+      <div class="field">
+        <label for="tier" class="label">Tier</label>
+        <select id="tier" class="text-input" [(ngModel)]="tier">
+          <option value="">Selecciona un tier</option>
+          <option value="Backend">Backend</option>
+          <option value="Middleware">Middleware</option>
+          <option value="Frontend">Frontend</option>
+          <option value="Infraestructura">Infraestructura</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="shared" class="label">Shared</label>
+        <select id="shared" class="text-input" [(ngModel)]="shared">
+          <option value="">Selecciona una opcion</option>
+          <option value="True">True</option>
+          <option value="False">False</option>
+        </select>
+      </div>
+
+      <div class="field field-full actions">
+        <button type="button" class="btn-generate" (click)="generar()">Generar</button>
+      </div>
+
+      <div class="field field-full" *ngIf="imagenPreview">
+        <div class="preview-box">
+          <label class="label">Vista previa</label>
+          <div class="preview-actions">
+            <button type="button" class="btn-export" (click)="exportarImagen()">Exportar PNG</button>
+          </div>
+          <img class="preview-image" [src]="imagenPreview" alt="Vista previa de tabla clave valor" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

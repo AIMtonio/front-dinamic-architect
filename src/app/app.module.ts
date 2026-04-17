@@ -10,6 +10,7 @@ import { ListaArquitecturaComponent } from './components/lista-arquitectura/list
 import { DiagramaSecuenciaComponent } from './components/diagrama-secuencia/diagrama-secuencia.component';
 import { ArchimateComponent } from './components/archimate/archimate.component';
 import { DocumentoComponent } from './components/documento/documento.component';
+import { TagsComponent } from './components/tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DocumentoComponent } from './components/documento/documento.component';
     ListaArquitecturaComponent,
     DiagramaSecuenciaComponent,
     ArchimateComponent,
-    DocumentoComponent
+    DocumentoComponent,
+    TagsComponent
   ],
   imports: [
     BrowserModule,

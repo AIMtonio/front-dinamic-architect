@@ -9,6 +9,7 @@ import { AltaArquitecturaComponent } from './components/alta-arquitectura/alta-a
 import { ListaArquitecturaComponent } from './components/lista-arquitectura/lista-arquitectura.component';
 import { DiagramaSecuenciaComponent } from './components/diagrama-secuencia/diagrama-secuencia.component';
 import { ArchimateComponent } from './components/archimate/archimate.component';
+import { DocumentoComponent } from './components/documento/documento.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ArchimateComponent } from './components/archimate/archimate.component';
     AltaArquitecturaComponent,
     ListaArquitecturaComponent,
     DiagramaSecuenciaComponent,
-    ArchimateComponent
+    ArchimateComponent,
+    DocumentoComponent
   ],
   imports: [
     BrowserModule,

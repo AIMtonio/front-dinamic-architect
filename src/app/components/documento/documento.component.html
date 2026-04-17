@@ -1,0 +1,34 @@
+<div class="page-container">
+  <div class="card">
+    <h1 class="title">Previa de documento de solución</h1>
+
+    <label for="problematica" class="label">Problematica</label>
+    <textarea
+      id="problematica"
+      [(ngModel)]="problematica"
+      class="textarea"
+      rows="7"
+      placeholder="Ejemplo: El sistema presenta alta latencia en horas pico..."
+    ></textarea>
+
+    <div class="actions">
+      <button class="btn btn-process" (click)="procesar()" [disabled]="cargando">
+        <span class="spinner" *ngIf="cargando"></span>
+        {{ cargando ? 'Procesando...' : 'Procesar' }}
+      </button>
+    </div>
+
+    <div class="api-status" *ngIf="estado !== 'idle'" [ngClass]="'status-' + estado">
+      {{ mensaje }}
+    </div>
+
+    <section class="result" *ngIf="htmlResultado">
+      <h2 class="result-title">Vista previa del documento</h2>
+      <iframe
+        class="webview"
+        title="Documento generado"
+        [attr.srcdoc]="htmlResultado"
+      ></iframe>
+    </section>
+  </div>
+</div>

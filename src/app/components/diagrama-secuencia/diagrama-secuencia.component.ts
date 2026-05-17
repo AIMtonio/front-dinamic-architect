@@ -6,6 +6,20 @@ interface Paso {
   descripcion: string;
 }
 
+interface GeneratedFileResponse {
+  filename?: string;
+  mimeType?: string;
+  fileBase64?: string;
+}
+
+interface SequenceUmlResponse {
+  message?: string;
+  data?: {
+    uml?: string;
+    [key: string]: unknown;
+  };
+}
+
 @Component({
   selector: 'app-diagrama-secuencia',
   templateUrl: './diagrama-secuencia.component.html',
@@ -64,12 +78,21 @@ export class DiagramaSecuenciaComponent {
 
     this.http.post(this.API_URL, body, { responseType: 'text' }).subscribe({
       next: (res) => {
-        this.resultado = res;
+        const processed = this.processSequenceResponse(res);
+        this.resultado = processed.content;
         this.estado = 'ok';
         this.generando = false;
-        this.diagramaUrl = this.plantUmlToUrl(res);
+
+        if (processed.mimeType.startsWith('image/')) {
+          this.diagramaUrl = null;
+          this.cargandoImagen = false;
+          this.descargarArchivo(processed.content, processed.fileName, processed.mimeType);
+          return;
+        }
+
+        this.diagramaUrl = this.plantUmlToUrl(processed.content);
         this.cargandoImagen = true;
-        this.descargarImagen(this.diagramaUrl);
+        this.descargarImagen(this.diagramaUrl, processed.fileName);
       },
       error: (err) => {
         this.estado = 'error';
@@ -110,8 +133,8 @@ export class DiagramaSecuenciaComponent {
     return `https://www.plantuml.com/plantuml/png/~h${hex}`;
   }
 
-  private descargarImagen(url: string): void {
-    const nombre = `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`;
+  private descargarImagen(url: string, fileName?: string): void {
+    const nombre = fileName || `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`;
     fetch(url)
       .then(r => r.blob())
       .then(blob => {
@@ -123,5 +146,69 @@ export class DiagramaSecuenciaComponent {
         setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
       })
       .catch(() => window.open(url, '_blank'));
+  }
+
+  private processSequenceResponse(responseText: string): {
+    fileName: string;
+    mimeType: string;
+    content: string;
+  } {
+    const parsed = this.tryParseJson(responseText);
+    if (!parsed || typeof parsed !== 'object') {
+      return {
+        fileName: `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`,
+        mimeType: 'text/plain',
+        content: responseText
+      };
+    }
+
+    const response = parsed as GeneratedFileResponse;
+    const sequenceResponse = parsed as SequenceUmlResponse;
+
+    if (sequenceResponse.data?.uml) {
+      return {
+        fileName: `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`,
+        mimeType: 'text/plain',
+        content: sequenceResponse.data.uml
+      };
+    }
+
+    if (!response.fileBase64) {
+      return {
+        fileName: response.filename || `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`,
+        mimeType: response.mimeType || 'text/plain',
+        content: responseText
+      };
+    }
+
+    return {
+      fileName: response.filename || `diagrama-${this.titulo.trim().replace(/\s+/g, '-') || 'secuencia'}.png`,
+      mimeType: response.mimeType || 'text/plain',
+      content: this.decodeBase64ToUtf8(response.fileBase64)
+    };
+  }
+
+  private descargarArchivo(content: string, fileName: string, mimeType: string): void {
+    const blob = new Blob([content], { type: mimeType });
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = fileName;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+  }
+
+  private tryParseJson(value: string): unknown {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+
+  private decodeBase64ToUtf8(base64Value: string): string {
+    const binary = atob(base64Value);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
   }
 }

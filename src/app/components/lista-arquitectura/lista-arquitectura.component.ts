@@ -6,6 +6,12 @@ import { Router } from '@angular/router';
 import { ComponenteItem } from '../../models/arquitectura.model';
 import { ArquitecturaService } from '../../services/arquitectura.service';
 
+interface GeneratedDiagramResponse {
+  filename?: string;
+  mimeType?: string;
+  fileBase64?: string;
+}
+
 @Component({
   selector: 'app-lista-arquitectura',
   templateUrl: './lista-arquitectura.component.html',
@@ -22,6 +28,7 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   driveDownloadUrl: string | null = null;
   driveFileName: string | null = null;
   driveFileContent: string | null = null;
+  driveMimeType: string | null = null;
 
   private sub!: Subscription;
   private readonly API_URL = `${environment.apiBaseUrl}/diagram/from-json`;
@@ -83,14 +90,17 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
     this.driveDownloadUrl = null;
     this.driveFileName = null;
     this.driveFileContent = null;
+    this.driveMimeType = null;
     const body = this.arquitecturaService.obtenerJson();
     this.http.post(this.API_URL, body, { responseType: 'text' }).subscribe({
       next: (res) => {
+        const processed = this.processDiagramResponse(res);
         this.apiEstado = 'ok';
         this.apiMensaje = 'Diagrama generado correctamente.';
         this.driveDownloadUrl = null;
-        this.driveFileName = 'diagrama.drawio';
-        this.driveFileContent = res;
+        this.driveFileName = processed.fileName;
+        this.driveFileContent = processed.fileContent;
+        this.driveMimeType = processed.mimeType;
         this.enviandoApi = false;
       },
       error: (err) => {
@@ -103,8 +113,9 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
 
   descargar(): void {
     const fileName = this.driveFileName ?? 'diagrama.drawio';
+    const mimeType = this.driveMimeType ?? 'application/xml';
     if (this.driveFileContent) {
-      const blob = new Blob([this.driveFileContent], { type: 'application/xml' });
+      const blob = new Blob([this.driveFileContent], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -119,5 +130,45 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
       a.download = fileName;
       a.click();
     }
+  }
+
+  private processDiagramResponse(responseText: string): {
+    fileName: string;
+    mimeType: string;
+    fileContent: string;
+  } {
+    const parsed = this.tryParseJson(responseText);
+    if (!parsed || typeof parsed !== 'object') {
+      return {
+        fileName: 'diagrama.drawio',
+        mimeType: 'application/xml',
+        fileContent: responseText
+      };
+    }
+
+    const response = parsed as GeneratedDiagramResponse;
+    const decodedContent = response.fileBase64
+      ? this.decodeBase64ToUtf8(response.fileBase64)
+      : responseText;
+
+    return {
+      fileName: response.filename || 'diagrama.drawio',
+      mimeType: response.mimeType || 'application/xml',
+      fileContent: decodedContent
+    };
+  }
+
+  private tryParseJson(value: string): unknown {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+
+  private decodeBase64ToUtf8(base64Value: string): string {
+    const binary = atob(base64Value);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
   }
 }

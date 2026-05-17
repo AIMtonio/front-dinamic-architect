@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,7 @@ import { DiagramaSecuenciaComponent } from './components/diagrama-secuencia/diag
 import { ArchimateComponent } from './components/archimate/archimate.component';
 import { DocumentoComponent } from './components/documento/documento.component';
 import { TagsComponent } from './components/tags/tags.component';
+import { SecureBodyInterceptor } from './interceptors/secure-body.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,13 @@ import { TagsComponent } from './components/tags/tags.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SecureBodyInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

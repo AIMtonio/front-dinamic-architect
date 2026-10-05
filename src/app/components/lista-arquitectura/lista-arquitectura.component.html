@@ -1,67 +1,116 @@
 <div class="page-container">
-  <div class="card">
-    <div class="header">
+  <header class="page-header header anim-in">
+    <div>
+      <span class="eyebrow">Arquitectura</span>
       <h1 class="title">
         Componentes registrados
         <span class="count-badge" *ngIf="componentes.length > 0">{{ componentes.length }}</span>
       </h1>
-      <button class="btn btn-back" (click)="irAAlta()">← Agregar más</button>
+      <p class="subtitle">Revisa los componentes, consulta el JSON y genera el diagrama desde la API.</p>
     </div>
+    <button class="btn btn-back" (click)="irAAlta()">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5 M11 18l-6-6 6-6"/></svg>
+      Agregar más
+    </button>
+  </header>
 
-    <div class="empty" *ngIf="componentes.length === 0">
-      <p>No hay componentes registrados aún.</p>
-      <button class="btn btn-primary" (click)="irAAlta()">Agregar primer componente</button>
+  <!-- Estado vacío -->
+  <section class="card empty anim-pop" *ngIf="componentes.length === 0">
+    <div class="empty-art" aria-hidden="true">
+      <span></span><span></span><span></span>
     </div>
+    <h2>No hay componentes registrados aún.</h2>
+    <p>Empieza agregando tu primer componente o importa un Excel.</p>
+    <button class="btn btn-primary" (click)="irAAlta()">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></svg>
+      Agregar primer componente
+    </button>
+  </section>
 
-    <table *ngIf="componentes.length > 0" class="tabla">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Componente</th>
-          <th>Tipo</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of componentes; let i = index">
-          <td class="idx">{{ i + 1 }}</td>
-          <td class="nombre">{{ item.nombre }}</td>
-          <td><span class="badge" [ngClass]="tipoColor(item.tipo)">{{ item.tipo }}</span></td>
-          <td>
-            <button class="btn-delete" (click)="eliminar(i)" title="Eliminar" [attr.aria-label]="'Eliminar ' + item.nombre">✕</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="json-section" *ngIf="componentes.length > 0">
-      <div class="json-toggle">
-        <button class="btn btn-outline" (click)="jsonVisible = !jsonVisible">
+  <ng-container *ngIf="componentes.length > 0">
+    <!-- Barra de acciones -->
+    <div class="toolbar card anim-in">
+      <div class="toolbar-group">
+        <button class="btn btn-outline btn-sm" (click)="jsonVisible = !jsonVisible" [class.on]="jsonVisible">
+          <svg viewBox="0 0 24 24"><path d="m16 18 6-6-6-6 M8 6l-6 6 6 6"/></svg>
           {{ jsonVisible ? 'Ocultar JSON' : 'Ver JSON' }}
         </button>
-        <button class="btn btn-outline" (click)="copiarJson()" *ngIf="jsonVisible">
+        <button class="btn btn-outline btn-sm anim-pop" (click)="copiarJson()" *ngIf="jsonVisible">
+          <svg viewBox="0 0 24 24"><path d="M9 9h11v11H9z M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
           {{ jsonCopiado ? '¡Copiado!' : 'Copiar' }}
         </button>
+      </div>
+
+      <div class="toolbar-group">
         <button class="btn btn-send" (click)="enviarApi()" [disabled]="enviandoApi">
           <span class="spinner" *ngIf="enviandoApi"></span>
-          {{ enviandoApi ? 'Enviando...' : '📤 Enviar a API' }}
+          <svg *ngIf="!enviandoApi" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z M22 2 11 13"/></svg>
+          {{ enviandoApi ? 'Enviando...' : 'Enviar a API' }}
         </button>
-        <button class="btn btn-danger" (click)="limpiar()">Limpiar todo</button>
-      </div>
 
-      <div class="api-status" *ngIf="apiEstado !== 'idle'" [ngClass]="'status-' + apiEstado">
-        {{ apiMensaje }}
-        <button
-          *ngIf="apiEstado === 'ok' && (driveDownloadUrl || driveFileContent)"
-          class="btn btn-download"
-          (click)="descargar()"
-        >
-          &#x2B07; Descargar archivo
-        </button>
+        <div class="more-menu">
+          <button class="btn-icon" (click)="toggleMenuAcciones($event)" [attr.aria-expanded]="menuAcciones" aria-label="Más acciones">
+            <svg viewBox="0 0 24 24"><path d="M12 5h.01 M12 12h.01 M12 19h.01"/></svg>
+          </button>
+          <div class="more-panel" *ngIf="menuAcciones" (click)="$event.stopPropagation()">
+            <button class="more-item" (click)="menuAcciones = false; irAAlta()">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></svg>
+              Agregar componentes
+            </button>
+            <button class="more-item danger" (click)="menuAcciones = false; limpiar()">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18 M8 6V4h8v2 M19 6l-1 14H6L5 6"/></svg>
+              Limpiar todo
+            </button>
+          </div>
+        </div>
       </div>
-
-      <pre class="json-preview" *ngIf="jsonVisible">{{ jsonResultado }}</pre>
     </div>
-  </div>
-</div>
 
+    <div class="api-status" *ngIf="apiEstado !== 'idle'" [ngClass]="'status-' + apiEstado">
+      <span>{{ apiMensaje }}</span>
+      <button
+        *ngIf="apiEstado === 'ok' && (driveDownloadUrl || driveFileContent)"
+        class="btn btn-download btn-sm"
+        (click)="descargar()"
+      >
+        <svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12l7 7 7-7"/></svg>
+        Descargar archivo
+      </button>
+    </div>
+
+    <div class="layout" [class.with-json]="jsonVisible">
+      <section class="card table-card anim-in">
+        <div class="table-wrapper">
+          <table class="data-table rows-anim">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Componente</th>
+                <th>Tipo</th>
+                <th class="col-action">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of componentes; let i = index">
+                <td class="idx">{{ i + 1 }}</td>
+                <td class="nombre">{{ item.nombre }}</td>
+                <td><span class="badge" [ngClass]="tipoColor(item.tipo)">{{ item.tipo }}</span></td>
+                <td class="col-action">
+                  <button class="btn-delete" (click)="eliminar(i)" title="Eliminar" [attr.aria-label]="'Eliminar ' + item.nombre">✕</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="json-panel anim-pop" *ngIf="jsonVisible">
+        <div class="json-head">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="json-file">arquitectura.json</span>
+        </div>
+        <pre class="code-block json-preview">{{ jsonResultado }}</pre>
+      </section>
+    </div>
+  </ng-container>
+</div>

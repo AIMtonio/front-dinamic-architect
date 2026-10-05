@@ -1,8 +1,15 @@
 <div class="page-container">
-  <div class="card">
+  <header class="page-header anim-in">
+    <span class="eyebrow">Herramientas</span>
     <h1 class="title">Previa de documento de solución</h1>
-    <br>
+    <p class="subtitle">Describe la problemática y genera una vista previa del documento de solución.</p>
+  </header>
 
+  <section class="card composer anim-in">
+    <label for="problematica" class="composer-label">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h5"/></svg>
+      Problemática
+    </label>
     <textarea
       id="problematica"
       [(ngModel)]="problematica"
@@ -11,24 +18,31 @@
       placeholder="Ejemplo: El sistema presenta alta latencia en horas pico..."
     ></textarea>
 
-    <div class="actions">
+    <div class="composer-footer">
+      <span class="char-count">{{ problematica.length }} caracteres</span>
       <button class="btn btn-process" (click)="procesar()" [disabled]="cargando">
         <span class="spinner" *ngIf="cargando"></span>
+        <svg *ngIf="!cargando" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8L4 10l4.9 3.6L7.6 20 12 16.6 16.4 20l-1.3-6.4L20 10l-6.1-1.2Z"/></svg>
         {{ cargando ? 'Procesando...' : 'Procesar' }}
       </button>
     </div>
 
-    <div class="api-status" *ngIf="estado !== 'idle'" [ngClass]="'status-' + estado">
-      {{ mensaje }}
-    </div>
+    <div class="progress" *ngIf="cargando"><span></span></div>
+  </section>
 
-    <section class="result" *ngIf="htmlResultado">
-      <h2 class="result-title">Vista previa del documento</h2>
-      <iframe
-        class="webview"
-        title="Documento generado"
-        [attr.srcdoc]="htmlResultado"
-      ></iframe>
-    </section>
+  <div class="api-status" *ngIf="estado !== 'idle'" [ngClass]="'status-' + estado">
+    {{ mensaje }}
   </div>
+
+  <section class="card result anim-pop" *ngIf="htmlResultado">
+    <div class="result-head">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <h2 class="result-title">Vista previa del documento</h2>
+    </div>
+    <iframe
+      class="webview"
+      title="Documento generado"
+      [attr.srcdoc]="htmlResultado"
+    ></iframe>
+  </section>
 </div>

@@ -1,92 +1,139 @@
 <div class="page-container">
-  <div class="card">
+  <header class="page-header anim-in">
+    <span class="eyebrow">Diagramas</span>
     <h1 class="title">Generador de Diagrama ArchiMate</h1>
     <p class="subtitle">Completa cada sección y genera el modelo ArchiMate en formato XML.</p>
+  </header>
 
+  <div class="sections stagger">
     <!-- Business Actors -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-label">Business Actors</span>
-        <button class="btn-add" type="button" (click)="agregar(businessActors)">+ Añadir</button>
+    <details class="section sec-actor" open>
+      <summary class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <span class="section-text">
+          <span class="section-label">Business Actors</span>
+          <span class="section-hint">Quién participa</span>
+        </span>
+        <span class="section-count">{{ businessActors.length }}</span>
+        <svg class="section-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="section-body">
+        <div class="item-row" *ngFor="let item of businessActors; let i = index; trackBy: trackByIndex">
+          <span class="row-num">{{ i + 1 }}</span>
+          <input type="text" [(ngModel)]="item.name" [name]="'ba-' + i" placeholder="Ej. Aplicaciones" />
+          <button class="btn-delete" (click)="eliminar(businessActors, i)" [disabled]="businessActors.length === 1">✕</button>
+        </div>
+        <button class="btn btn-add" type="button" (click)="agregar(businessActors)">+ Añadir</button>
       </div>
-      <div class="item-row" *ngFor="let item of businessActors; let i = index; trackBy: trackByIndex">
-        <span class="row-num">{{ i + 1 }}</span>
-        <input type="text" [(ngModel)]="item.name" [name]="'ba-' + i" placeholder="Ej. Aplicaciones" />
-        <button class="btn-delete" (click)="eliminar(businessActors, i)" [disabled]="businessActors.length === 1">✕</button>
-      </div>
-    </div>
+    </details>
 
     <!-- Drivers -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-label">Drivers</span>
-        <button class="btn-add" type="button" (click)="agregar(drivers)">+ Añadir</button>
+    <details class="section sec-driver" open>
+      <summary class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z M12 8v4l3 3"/></svg></span>
+        <span class="section-text">
+          <span class="section-label">Drivers</span>
+          <span class="section-hint">Qué motiva el cambio</span>
+        </span>
+        <span class="section-count">{{ drivers.length }}</span>
+        <svg class="section-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="section-body">
+        <div class="item-row" *ngFor="let item of drivers; let i = index; trackBy: trackByIndex">
+          <span class="row-num">{{ i + 1 }}</span>
+          <input type="text" [(ngModel)]="item.name" [name]="'dr-' + i" placeholder="Ej. Incrementar conversión en tienda" />
+          <button class="btn-delete" (click)="eliminar(drivers, i)" [disabled]="drivers.length === 1">✕</button>
+        </div>
+        <button class="btn btn-add" type="button" (click)="agregar(drivers)">+ Añadir</button>
       </div>
-      <div class="item-row" *ngFor="let item of drivers; let i = index; trackBy: trackByIndex">
-        <span class="row-num">{{ i + 1 }}</span>
-        <input type="text" [(ngModel)]="item.name" [name]="'dr-' + i" placeholder="Ej. Incrementar conversión en tienda" />
-        <button class="btn-delete" (click)="eliminar(drivers, i)" [disabled]="drivers.length === 1">✕</button>
-      </div>
-    </div>
+    </details>
 
     <!-- Goals -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-label">Goals</span>
-        <button class="btn-add" type="button" (click)="agregar(goals)">+ Añadir</button>
+    <details class="section sec-goal" open>
+      <summary class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span>
+        <span class="section-text">
+          <span class="section-label">Goals</span>
+          <span class="section-hint">Resultados esperados</span>
+        </span>
+        <span class="section-count">{{ goals.length }}</span>
+        <svg class="section-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="section-body">
+        <div class="item-row" *ngFor="let item of goals; let i = index; trackBy: trackByIndex">
+          <span class="row-num">{{ i + 1 }}</span>
+          <input type="text" [(ngModel)]="item.name" [name]="'go-' + i" placeholder="Ej. Habilitar cambalache para PF" />
+          <button class="btn-delete" (click)="eliminar(goals, i)" [disabled]="goals.length === 1">✕</button>
+        </div>
+        <button class="btn btn-add" type="button" (click)="agregar(goals)">+ Añadir</button>
       </div>
-      <div class="item-row" *ngFor="let item of goals; let i = index; trackBy: trackByIndex">
-        <span class="row-num">{{ i + 1 }}</span>
-        <input type="text" [(ngModel)]="item.name" [name]="'go-' + i" placeholder="Ej. Habilitar cambalache para PF" />
-        <button class="btn-delete" (click)="eliminar(goals, i)" [disabled]="goals.length === 1">✕</button>
-      </div>
-    </div>
+    </details>
 
     <!-- Principles -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-label">Principles</span>
-        <button class="btn-add" type="button" (click)="agregar(principles)">+ Añadir</button>
+    <details class="section sec-principle" open>
+      <summary class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18 M5 7h14 M3 13l2-6 2 6a2 2 0 0 1-4 0Z M17 13l2-6 2 6a2 2 0 0 1-4 0Z M8 21h8"/></svg></span>
+        <span class="section-text">
+          <span class="section-label">Principles</span>
+          <span class="section-hint">Reglas que guían</span>
+        </span>
+        <span class="section-count">{{ principles.length }}</span>
+        <svg class="section-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="section-body">
+        <div class="item-row" *ngFor="let item of principles; let i = index; trackBy: trackByIndex">
+          <span class="row-num">{{ i + 1 }}</span>
+          <input type="text" [(ngModel)]="item.name" [name]="'pr-' + i" placeholder="Ej. Mayor tasa en cierre en tienda" />
+          <button class="btn-delete" (click)="eliminar(principles, i)" [disabled]="principles.length === 1">✕</button>
+        </div>
+        <button class="btn btn-add" type="button" (click)="agregar(principles)">+ Añadir</button>
       </div>
-      <div class="item-row" *ngFor="let item of principles; let i = index; trackBy: trackByIndex">
-        <span class="row-num">{{ i + 1 }}</span>
-        <input type="text" [(ngModel)]="item.name" [name]="'pr-' + i" placeholder="Ej. Mayor tasa en cierre en tienda" />
-        <button class="btn-delete" (click)="eliminar(principles, i)" [disabled]="principles.length === 1">✕</button>
-      </div>
-    </div>
+    </details>
 
     <!-- Course of Actions -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-label">Course of Actions</span>
-        <button class="btn-add" type="button" (click)="agregar(courseOfActions)">+ Añadir</button>
+    <details class="section sec-action" open>
+      <summary class="section-header">
+        <span class="section-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14 M13 6l6 6-6 6"/></svg></span>
+        <span class="section-text">
+          <span class="section-label">Course of Actions</span>
+          <span class="section-hint">Cómo se logrará</span>
+        </span>
+        <span class="section-count">{{ courseOfActions.length }}</span>
+        <svg class="section-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="section-body">
+        <div class="item-row" *ngFor="let item of courseOfActions; let i = index; trackBy: trackByIndex">
+          <span class="row-num">{{ i + 1 }}</span>
+          <input type="text" [(ngModel)]="item.name" [name]="'ca-' + i" placeholder="Ej. Implementar portal de cambalache" />
+          <button class="btn-delete" (click)="eliminar(courseOfActions, i)" [disabled]="courseOfActions.length === 1">✕</button>
+        </div>
+        <button class="btn btn-add" type="button" (click)="agregar(courseOfActions)">+ Añadir</button>
       </div>
-      <div class="item-row" *ngFor="let item of courseOfActions; let i = index; trackBy: trackByIndex">
-        <span class="row-num">{{ i + 1 }}</span>
-        <input type="text" [(ngModel)]="item.name" [name]="'ca-' + i" placeholder="Ej. Implementar portal de cambalache" />
-        <button class="btn-delete" (click)="eliminar(courseOfActions, i)" [disabled]="courseOfActions.length === 1">✕</button>
-      </div>
-    </div>
+    </details>
+  </div>
 
-    <!-- Acción -->
-    <div class="actions">
-      <button
-        class="btn btn-primary"
-        (click)="generar()"
-        [disabled]="generando || !formValido()"
-      >
-        <span class="spinner" *ngIf="generando"></span>
-        {{ generando ? 'Generando...' : '⚡ Generar ArchiMate' }}
-      </button>
-    </div>
+  <!-- Acción -->
+  <div class="card action-bar anim-in">
+    <span class="action-hint">
+      <svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z M12 16v-4 M12 8h.01"/></svg>
+      Todos los campos deben tener valor para generar el modelo.
+    </span>
+    <button
+      class="btn btn-primary"
+      (click)="generar()"
+      [disabled]="generando || !formValido()"
+    >
+      <span class="spinner" *ngIf="generando"></span>
+      <svg *ngIf="!generando" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+      {{ generando ? 'Generando...' : 'Generar ArchiMate' }}
+    </button>
+  </div>
 
-    <!-- Feedback -->
-    <div class="feedback status-ok" *ngIf="estado === 'ok'">
-      &#x2705; Diagrama generado y descarga iniciada.
-    </div>
-    <div class="feedback status-error" *ngIf="estado === 'error'">
-      {{ mensajeError }}
-    </div>
+  <!-- Feedback -->
+  <div class="feedback status-ok" *ngIf="estado === 'ok'">
+    &#x2705; Diagrama generado y descarga iniciada.
+  </div>
+  <div class="feedback status-error" *ngIf="estado === 'error'">
+    {{ mensajeError }}
   </div>
 </div>
-

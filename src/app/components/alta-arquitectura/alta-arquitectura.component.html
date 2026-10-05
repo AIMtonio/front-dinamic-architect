@@ -1,78 +1,126 @@
 <div class="page-container">
-  <div class="card">
 
   <!-- Toast éxito -->
-  <div class="toast-ok" *ngIf="agregadoOk">✓ Componente agregado correctamente</div>
+  <div class="toast-ok" *ngIf="agregadoOk">
+    <svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+    Componente agregado correctamente
+  </div>
+
+  <header class="page-header anim-in">
+    <span class="eyebrow">Arquitectura</span>
     <h1 class="title">Alta de Arquitectura</h1>
     <p class="subtitle">Agrega componentes manualmente o importa un archivo Excel.</p>
+  </header>
+
+  <div class="grid-2 stagger">
 
     <!-- Formulario manual -->
-    <div class="form-group">
-      <label for="nombre">Nombre del componente</label>
-      <input
-        id="nombre"
-        type="text"
-        [(ngModel)]="nombre"
-        placeholder="Ej. pos-service-back"
-        [class.error]="errorNombre"
-        (keyup.enter)="agregar()"
-      />
-      <span class="error-msg" *ngIf="errorNombre">El nombre es obligatorio.</span>
-    </div>
+    <section class="card">
+      <h2 class="card-title">
+        <span class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></svg></span>
+        <span>Registro manual<small>Un componente a la vez</small></span>
+      </h2>
 
-    <div class="form-group">
-      <label for="tipo">Tipo</label>
-      <select id="tipo" [(ngModel)]="tipo">
-        <option *ngFor="let t of tiposDisponibles" [value]="t">{{ t }}</option>
-      </select>
-    </div>
-
-    <div class="actions">
-      <button class="btn btn-primary" (click)="agregar()">+ Agregar componente</button>
-      <button class="btn btn-secondary" (click)="irALista()">Ver lista →</button>
-    </div>
-
-    <!-- Divisor -->
-    <div class="divider"><span>o importa desde Excel</span></div>
-
-    <!-- Zona de carga Excel -->
-    <input
-      #fileInput
-      type="file"
-      accept=".xlsx,.xls,.csv"
-      style="display:none"
-      (change)="onArchivoSeleccionado($event)"
-    />
-
-    <div
-      class="drop-zone"
-      [class.activo]="arrastreActivo"
-      (dragover)="onDragOver($event)"
-      (dragleave)="onDragLeave()"
-      (drop)="onDrop($event)"
-      (click)="abrirSelector()"
-    >
-      <span class="drop-icon">&#x1F4C2;</span>
-      <span class="drop-text" *ngIf="!excelNombreArchivo">
-        Arrastra tu Excel aquí o <strong>haz clic para seleccionar</strong>
-      </span>
-      <span class="drop-text" *ngIf="excelNombreArchivo">
-        <strong>{{ excelNombreArchivo }}</strong>
-      </span>
-      <span class="drop-hint">Columna A: nombre &nbsp;|&nbsp; Columna B: tipo (eks, lambda, fargate, ec2)</span>
-    </div>
-
-    <!-- Error de parseo -->
-    <div class="excel-error" *ngIf="excelError">
-      ⚠️ {{ excelError }}
-    </div>
-
-    <!-- Vista previa -->
-    <div class="preview-section" *ngIf="excelPreview.length > 0">
-      <div class="preview-header">
-        <span>Vista previa &mdash; <strong>{{ excelPreview.length }} filas</strong> encontradas</span>
+      <div class="form-group">
+        <label for="nombre">Nombre del componente</label>
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="nombre"
+          placeholder="Ej. pos-service-back"
+          [class.error]="errorNombre"
+          (keyup.enter)="agregar()"
+        />
+        <span class="error-msg" *ngIf="errorNombre">El nombre es obligatorio.</span>
       </div>
-      <table class="preview-table">
+
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" [(ngModel)]="tipo">
+          <option *ngFor="let t of tiposDisponibles" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+
+      <div class="tipo-preview">
+        <span class="tipo-preview-label">Vista previa</span>
+        <span class="badge" [ngClass]="'badge-' + tipo">{{ tipo }}</span>
+        <span class="tipo-preview-name">{{ nombre || 'nombre-del-componente' }}</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" (click)="agregar()">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></svg>
+          Agregar componente
+        </button>
+        <button class="btn btn-secondary" (click)="irALista()">
+          Ver lista
+          <svg viewBox="0 0 24 24"><path d="M5 12h14 M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Importación Excel -->
+    <section class="card">
+      <h2 class="card-title">
+        <span class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8l-5-5-5 5 M12 3v12"/></svg></span>
+        <span>Importar desde Excel<small>.xlsx, .xls o .csv</small></span>
+      </h2>
+
+      <input
+        #fileInput
+        type="file"
+        accept=".xlsx,.xls,.csv"
+        style="display:none"
+        (change)="onArchivoSeleccionado($event)"
+      />
+
+      <div
+        class="drop-zone"
+        [class.activo]="arrastreActivo"
+        [class.cargado]="excelNombreArchivo"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+        (click)="abrirSelector()"
+      >
+        <span class="drop-icon">
+          <svg *ngIf="!excelNombreArchivo" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z M12 10v6 M9 13l3-3 3 3"/></svg>
+          <svg *ngIf="excelNombreArchivo" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M9 15l2 2 4-4"/></svg>
+        </span>
+        <span class="drop-text" *ngIf="!excelNombreArchivo">
+          Arrastra tu Excel aquí o <strong>haz clic para seleccionar</strong>
+        </span>
+        <span class="drop-text" *ngIf="excelNombreArchivo">
+          <strong>{{ excelNombreArchivo }}</strong>
+        </span>
+        <span class="drop-hint">Columna A: nombre &nbsp;·&nbsp; Columna B: tipo (eks, lambda, fargate, ec2)</span>
+      </div>
+
+      <!-- Error de parseo -->
+      <div class="excel-error" *ngIf="excelError">
+        <span>⚠️ {{ excelError }}</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- Vista previa -->
+  <section class="card preview-section anim-pop" *ngIf="excelPreview.length > 0">
+    <div class="preview-header">
+      <h2 class="card-title">
+        <span class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg></span>
+        <span>Vista previa<small><strong>{{ excelPreview.length }} filas</strong> encontradas</small></span>
+      </h2>
+      <div class="preview-actions">
+        <button class="btn btn-discard" (click)="descartarExcel()">Descartar</button>
+        <button class="btn btn-import" (click)="importarExcel()">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5 M5 12l7-7 7 7"/></svg>
+          Importar todos
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table rows-anim">
         <thead>
           <tr>
             <th>#</th>
@@ -88,12 +136,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="preview-actions">
-        <button class="btn btn-import" (click)="importarExcel()">&#x2B06; Importar todos</button>
-        <button class="btn btn-discard" (click)="descartarExcel()">Descartar</button>
-      </div>
     </div>
+  </section>
 
-  </div>
 </div>
-

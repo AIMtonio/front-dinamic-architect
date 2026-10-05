@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -21,6 +21,7 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   componentes: ComponenteItem[] = [];
   jsonVisible = false;
   jsonCopiado = false;
+  menuAcciones = false;
 
   enviandoApi = false;
   apiEstado: 'idle' | 'ok' | 'error' = 'idle';
@@ -56,6 +57,17 @@ export class ListaArquitecturaComponent implements OnInit, OnDestroy {
   limpiar(): void {
     if (!confirm(`¿Eliminar los ${this.componentes.length} componentes? Esta acción no se puede deshacer.`)) return;
     this.arquitecturaService.limpiar();
+  }
+
+  toggleMenuAcciones(event: Event): void {
+    event.stopPropagation();
+    this.menuAcciones = !this.menuAcciones;
+  }
+
+  @HostListener('document:click')
+  @HostListener('document:keydown.escape')
+  cerrarMenuAcciones(): void {
+    this.menuAcciones = false;
   }
 
   irAAlta(): void {
